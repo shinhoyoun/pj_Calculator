@@ -25,13 +25,94 @@
 
 package Calculator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Calculator {
 
+    private final int MAX_SIZE = 10;
 
-    public long calculator (double n1 , double n2, char operator) {
+    // 리스트 생성
+    private static List<Double> resultList = new ArrayList<>();
+
+    double result;
+
+    // getter, setter 생성+기능
+
+    public List<Double> getResultList() {
+        return new ArrayList<>(resultList);
+    }
+
+    // 저장 결과 모두 출력
+    public void printResult() {
+
+//        if (resultList.isEmpty()) {
+//            System.out.println("저장된 계산 결과가 없습니다");
+//        } else {
+//            System.out.println("현재 저장된 결과 목록 (" + resultList.size() + "개): " + resultList);
+//        }
+
+        if ( resultList.isEmpty() ) {
+            System.out.println(" 저장된 계산 결과가 없습니다.");
+        } else {
+            System.out.println("저장된 계산 결과 목록 : " + resultList.size() + "개 : ");
+            for (int i = 0; i < resultList.size(); i++) {
+                System.out.println((i + 1) + ". " + resultList.get(i));
+            }
+
+        }
+    }
+
+    // 결과 리스트에 자동 추가 (10개 초과시 자동 삭제)
+    public void addResult(double result) {
+//        resultList.add(result);
+        if (resultList.size() >= MAX_SIZE) {
+            double removed = resultList.remove(0);  // 가장 오래된 결과값 삭제
+            System.out.println("10개 초과로 가장 오래된 결과 (" + removed + ") 가 삭제되었습니다.");
+        }
+        resultList.add(result);
+    }
+
+
+    // 특정 결과 수동 삭제
+    public void deleteResult(int index) {
+        if (index < 1 || index > resultList.size()) {
+            System.out.println("잘못된 인덱스입니다.");
+        } else {
+            double removed = resultList.remove(index - 1);
+            System.out.println("삭제된 결과: " + removed);
+        }
+    }
+
+
+//    public void deleteResult(double scanner) {
+////        resultList.remove(0);
+//
+//        if (!resultList.isEmpty()) {    // 리스트가 비어 있지 않은 경우
+//            System.out.println("오래된 저장결과를 삭제하시겠습니까?  (remove 입력시 삭제)");
+//
+//            if (remove.equalsIgnoreCase("remove")) {
+//                resultList.remove(0); // 첫 번째 요소 삭제
+//                System.out.println("가장 먼저 저장된 연산 결과가 삭제되었습니다.");
+//            } else {
+//                System.out.println("삭제가 취소되었습니다.");
+//            }
+//        } else {
+//            System.out.println("삭제할 결과가 없습니다.");
+//        }
+//    }
+
+
+    /**
+     * @param n1       : 첫 번째 입력값
+     * @param n2       : 두 번째 입력값
+     * @param operator : 사칙연산 기호
+     * @return : 결과값
+     */
+    public double calculator(double n1, double n2, char operator) {
 
         // 생성
-        double result = 0;
+        result = 0;
 
         // 계산
         switch (operator) {
@@ -52,14 +133,19 @@ public class Calculator {
                 break;
         }
 
-        return (long)result;
+        // 계산 결과 저장
+//        addResult(result);
+
+        // 반환
+        return result;
 
     }
 
-    // calculator 에서 계산된 re값도 main에 가져와서 출력
 
-    // main에서 계산 돌릴 때 try-catch를 사용할려고 했는데 이때 각 조건마다 다 붙여서 넣어줘야 하는지
-        // 강의에서는 다른 클래스에서 사용해서 상속받을 경우로 나옴
+// calculator 에서 계산된 re값도 main에 가져와서 출력
+
+// main에서 계산 돌릴 때 try-catch를 사용할려고 했는데 이때 각 조건마다 다 붙여서 넣어줘야 하는지
+// 강의에서는 다른 클래스에서 사용해서 상속받을 경우로 나옴
 
 
 }

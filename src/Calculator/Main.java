@@ -39,7 +39,8 @@
       사칙연산을 수행 후, 결과값 반환 메서드 구현 & 연산 결과를 저장하는 컬렉션 타입 필드를 가진 Calculator 클래스를 생성
       사칙연산을 수행한 후, 결과값을 반환하는 메서드 구현
       연산 결과를 저장하는 컬렉션 타입 필드를 가진 Calculator 클래스를 생성
-      1) 양의 정수 2개(0 포함)와 연산 기호를 매개변수로 받아 사칙연산(➕,➖,✖️,➗) 기능을 수행한 후 2) 결과 값을 반환하는 메서드와 연산 결과를 저장하는 컬렉션 타입 필드를 가진 Calculator 클래스를 생성합니다.
+      1) 양의 정수 2개(0 포함)와 연산 기호를 매개변수로 받아 사칙연산(➕,➖,✖️,➗) 기능을 수행한 후 2) 결과 값을 반환하는
+       메서드와 연산 결과를 저장하는 컬렉션 타입 필드를 가진 Calculator 클래스를 생성합니다.
 
       **Lv 1에서 구현한 App 클래스의 main 메서드에 Calculator 클래스가 활용될 수 있도록 수정**
       연산 수행 역할은 Calculator 클래스가 담당
@@ -51,7 +52,8 @@
       간접 접근을 통해 필드에 접근하여 **수정할** 수 있도록 구현합니다. (Setter 메서드)
       위 요구사항을 모두 구현 했다면 App 클래스의 main 메서드에서 위에서 구현한 메서드를 활용 해봅니다.
 
-      Calculator 클래스에 저장된 연산 결과들 중 가장 먼저 저장된 데이터를 삭제하는 기능을 가진 메서드를 구현한 후 App 클래스의 main 메서드에 삭제 메서드가 활용될 수 있도록 수정
+      Calculator 클래스에 저장된 연산 결과들 중 가장 먼저 저장된 데이터를 삭제하는 기능을 가진 메서드를 구현한 후
+      App 클래스의 main 메서드에 삭제 메서드가 활용될 수 있도록 수정
       키워드 : `컬렉션`
       컬렉션에서 ‘값을 넣고 제거하는 방법을 이해한다.’가 중요합니다!
 * */
@@ -60,6 +62,7 @@
 
 package Calculator;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -69,26 +72,46 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Calculator calculator = new Calculator();
 
+        double result = 0;
+        double n1 = 0;
+        double n2 = 0;
+        boolean isValid = false;
+
         // 실행 문구 출력
-        System.out.println("계산기 실행 \n 아무 키를 입력하면 실행합니다.");
+        System.out.println("계산기 실행\n아무 키를 입력하면 실행합니다.");
 //        System.out.println("언제든 exit 입력시 종료");
 
-        long result = 0;
-        long re = 0;
 
         while (true) {
             String str = scanner.nextLine();
 
+
             // n1 입력 받기
-            System.out.print("\n" + "첫 번째 숫자를 입력하세요 : ");
-            double n1 = scanner.nextLong();
+            System.out.print("첫 번째 숫자를 입력하세요 : ");
+            try {
+                n1 = scanner.nextDouble();
+                isValid = true; // 올바른 값 받으면 탈출
+            }
+            catch (InputMismatchException e) {
+                System.out.println("잘못 입력하셨습니다. 첫 번째 숫자를 다시 입력하세요.");
+                scanner.next(); // 잘못 입력된 값을 버퍼에서 제거
+                continue; // 다시 입력 받도록
+            }
 
             // n2 입력 받기
-            System.out.print("\n" + "두 번째 숫자를 입력하세요 : ");
-            double n2 = scanner.nextLong();
+            System.out.print("두 번째 숫자를 입력하세요 : ");
+            try {
+                n2 = scanner.nextDouble();
+                isValid = true; // 올바른 값 받으면 탈출
+            }
+            catch (InputMismatchException e) {
+                System.out.println("잘못 입력하셨습니다. 두 번재 숫자를 다시 입력하세요");
+                scanner.next(); // 잘못 입력된 값을 버퍼에서 제거
+                continue; // 다시 입력 받도록
+            }
 
             // 사칙연산 기호 입력 받기
-            System.out.print("\n" + "사칙연산 기호 입력하세요 ( +, -, *, / ) : ");
+            System.out.print("사칙연산 기호 입력하세요 ( +, -, *, / ) : ");
             char operator = scanner.next().charAt(0);
 
 
@@ -105,19 +128,32 @@ public class Main {
                 System.out.println("나눗셈에서 부모에 0이 올 수 없습니다. 다시 입력하세요");
                 continue;
             }
+//            else {
+//                if (operator == '/') {
+//                    result = calculator.calculator(n1, n2, operator);
+//                }
+//            }
+
+            result = calculator.calculator(n1, n2, operator);
+
+            // 결과값 출력
+            if (operator == '/') {
+                System.out.println("결과 값 : " + result);
+            }
             else {
-                result = calculator.calculator(n1, n2, operator);
+                System.out.println("결과 값 : " + (long)result);
             }
 
 
-            // 결과값 출력
-            System.out.println("결과 값 : " + result);
+//            System.out.println("저장된 결과값 : " + calculator.removeResult());
+            calculator.printResult();   // 저장된 리스트 출력
+            calculator.addResult(result);   // 결과 저장
 
 
             // 추가진행 중단 선택
             scanner.nextLine();  // 없으면 결과값 출력 후 다시 실행되면서 무한루프 이유는 버퍼가 남아서 자동으로 입력된것으로 넘어가는것으로 추정. 이유는 모르겠음
-            System.out.println("추가 계산은 아무 키를 , 종료는 exit 를 입력하세요" + "\n");
-            str = scanner.nextLine();    // nextLine() -> next() 로 수정하면 됨    / 계행때문이라해도 조건이 있는데 왜 넘어가지?
+            System.out.println("추가 계산은 아무 키를 , 종료는 exit 를 입력하세요");
+            str = scanner.next();    // nextLine() -> next() 로 수정하면 됨    / 개행때문이라해도 조건이 있는데 왜 넘어가지?
             if (str.equals("exit")) {
                 break;
             }
